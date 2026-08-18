@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đây là tai khoản riêng tư. Hãy đăng nhập để xem nội dung</title>
+    <link rel="icon" href="https://i.pinimg.com/vwebp/736x/5d/63/c8/5d63c857404bab94c94a3f5b719628f2.webp" type="image/webp">
+    <style>
+        :root {
+            color-scheme: dark;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #000000;
+            color: #f8fafc;
+        }
+        .app {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 100vh;
+            background: #000000;
+        }
+        .sidebar {
+            background: #000000;
+            border-right: none;
+            padding: 20px 18px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+        .logo-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            background: transparent;
+            overflow: hidden;
+        }
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .logo-text {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 999px;
+            padding: 10px 14px;
+            margin-bottom: 22px;
+        }
+        .search-box input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .search-box input::placeholder {
+            color: rgba(248,250,252,0.55);
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            color: #e2e8f0;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: background 0.2s ease;
+        }
+        .nav-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .nav-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: transparent;
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
+        }
+        .nav-item.active .nav-icon {
+            border-color: #34d9ff;
+            box-shadow: 0 0 0 2px rgba(52,217,255,0.18);
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+        .nav-item.active {
+            color: #ffffff;
+            background: rgba(255,255,255,0.06);
+        }
+        .nav-label {
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.75rem;
+            background: #ff2e5b;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 999px;
+            min-width: 24px;
+            text-align: center;
+        }
+        .nav-item.profile {
+            color: #f43f5e;
+        }
+        .main {
+            background: #000000;
+        }
+        .profile-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 22px;
+        }
+        .avatar {
+            width: 140px;
+            height: 140px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #111111;
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.14), 0 0 0 8px rgba(255,255,255,0.05);
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-info {
+            display: grid;
+            gap: 10px;
+            width: 100%;
+            max-width: 680px;
+        }
+        .profile-name {
+            display: grid;
+            gap: 8px;
+        }
+        .profile-name .title-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .profile-name h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        .profile-name .verified {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        .profile-name .handle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        .profile-name p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .stat {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            text-align: left;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .stat strong {
+            display: inline-block;
+            font-size: 1rem;
+            margin-bottom: 0;
+            color: #ffffff;
+        }
+        .stat span {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 50;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .avatar-modal {
+            width: min(560px, 100%);
+            background: #0b1120;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px;
+            box-shadow: 0 40px 120px rgba(0,0,0,0.35);
+            padding: 24px;
+            position: relative;
+        }
+        .avatar-modal h3 {
+            margin: 0 0 16px;
+            font-size: 1.1rem;
+            color: #f8fafc;
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            color: #f8fafc;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: grid;
+            place-items: center;
+            transition: background 0.2s ease;
+        }
+        .modal-close:hover {
+            background: rgba(255,255,255,0.14);
+        }
+        .avatar-controls {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+        .avatar-controls label {
+            margin: 0;
+            font-size: 1rem;
+            color: #f8fafc;
+        }
+        .avatar-controls label {
+            display: block;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        .avatar-controls input[type="range"] {
+            width: 100%;
+        }
+        .align-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .align-button {
+            flex: 1;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04);
+            color: #f8fafc;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .align-button.active,
+        .align-button:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.22);
+        }
+        .avatar-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .avatar-actions button {
+            flex: 1;
+            min-width: 120px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04);
+            color: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .avatar-actions button:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        .button {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #f8fafc;
+            padding: 12px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .button:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-1px);
+        }
+        .section-note p {
+            margin: 0;
+            color: #94a3b8;
+        }
+        .tabs {
+            display: flex;
+            gap: 18px;
+            padding: 24px 32px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .tab {
+            padding-bottom: 14px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .tab.active {
+            color: #ffffff;
+            border-bottom: 2px solid #ffffff;
+        }
+        .content {
+            padding: 24px 32px;
+        }
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+        .card {
+            background: #111111;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .card-thumb {
+            height: 160px;
+            background: linear-gradient(180deg, #1f2937, #0f172a);
+            position: relative;
+        }
+        .card-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.5));
+        }
+        .card-info {
+            padding: 16px;
+        }
+        .card-info p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 960px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                padding: 16px;
+            }
+            .sidebar h2 {
+                grid-column: span 3;
+            }
+            .nav-item {
+                justify-content: center;
+                padding: 10px;
+            }
+            .profile-header,
+            .tabs,
+            .content {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon"><img src="https://i.pinimg.com/vwebp/736x/5d/63/c8/5d63c857404bab94c94a3f5b719628f2.webp" alt="TikTok"></span>
+                <span class="logo-text">TikTok</span>
+            </div>
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Tìm kiếm" />
+            </div>
+            <a href="#" class="nav-item active"><span class="nav-icon">🏠</span><span class="nav-label">Đề xuất</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">🧭</span><span class="nav-label">Khám phá</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">👥</span><span class="nav-label">Đã follow</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">Bạn bè</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">📺</span><span class="nav-label">LIVE</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">Tin nhắn</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Hoạt động</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">⬆️</span><span class="nav-label">Tải lên</span></a>
+            <a href="#" class="nav-item profile"><span class="nav-icon">👤</span><span class="nav-label">Hồ sơ</span></a>
+            <a href="#" class="nav-item"><span class="nav-icon">⋯</span><span class="nav-label">Thêm</span></a>
+        </aside>
+
+        <main class="main">
+            <div class="profile-header">
+                <div class="profile-card">
+                    <div class="avatar">
+                        <img src="https://i.pinimg.com/736x/79/bd/58/79bd5832202d8b428a28c077cb16341a.jpg" alt="Avatar">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">
+                            <div class="title-row">
+                                <h1>Katツ</h1>
+                                <span class="verified">🔒</span>
+                                <span class="handle">@katr8134</span>
+                            </div>
+                            <p>soi cái gì?</p>
+                        </div>
+                        <div class="stats">
+                            <div class="stat"><strong>14</strong><span>Đã follow</span></div>
+                            <div class="stat"><strong>20</strong><span>Follower</span></div>
+                            <div class="stat"><strong>0</strong><span>Lượt thích</span></div>
+                        </div>
+                        <div class="actions">
+                            <button id="editProfileBtn" class="button" type="button">Sửa hồ sơ</button>
+                            <button class="button" type="button">Quảng bá bài đăng</button>
+                            <button class="button" type="button">⚙️</button>
+                            <button class="button" type="button">↗️</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-overlay" id="avatarModal">
+                    <div class="avatar-modal" role="dialog" aria-modal="true" aria-labelledby="avatarModalTitle">
+                        <button id="closeAvatarModal" class="modal-close" type="button" aria-label="Đóng">×</button>
+                        <div class="avatar-controls">
+                            <h3 id="avatarModalTitle">Điều chỉnh avatar</h3>
+                            <div>
+                                <label for="avatarSizeSlider">Kích thước: <span id="avatarSizeValue">190</span>px</label>
+                                <input id="avatarSizeSlider" type="range" min="120" max="260" value="190" />
+                            </div>
+                            <div>
+                                <label>Căn chỉnh:</label>
+                                <div class="align-buttons">
+                                    <button id="align-left" class="align-button active" type="button">Trái</button>
+                                    <button id="align-center" class="align-button" type="button">Giữa</button>
+                                    <button id="align-right" class="align-button" type="button">Phải</button>
+                                </div>
+                            </div>
+                            <div class="avatar-actions">
+                                <button id="autoAlign" type="button">Tự căn chỉnh</button>
+                                <button id="resetAvatar" type="button">Đặt lại</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-note">
+                    <p>web fake</p>
+                </div>
+            </div>
+            <div class="tabs">
+                <div class="tab active">Video</div>
+                <div class="tab">Yêu thích</div>
+                <div class="tab">Đã thích</div>
+            </div>
+        </main>
+    </div>
+    <script>
+        const avatar = document.querySelector('.avatar');
+        const avatarSizeSlider = document.getElementById('avatarSizeSlider');
+        const avatarSizeValue = document.getElementById('avatarSizeValue');
+        const profileCard = document.querySelector('.profile-card');
+        const avatarModal = document.getElementById('avatarModal');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const closeAvatarModal = document.getElementById('closeAvatarModal');
+        const autoAlignBtn = document.getElementById('autoAlign');
+        const resetAvatarBtn = document.getElementById('resetAvatar');
+
+        function updateAvatarSize() {
+            const size = avatarSizeSlider.value;
+            avatar.style.width = `${size}px`;
+            avatar.style.height = `${size}px`;
+            avatarSizeValue.textContent = size;
+        }
+
+        function setAlignment(direction) {
+            document.querySelectorAll('.align-button').forEach(button => button.classList.remove('active'));
+            const button = document.getElementById(`align-${direction}`);
+            if (button) button.classList.add('active');
+
+            if (direction === 'left') {
+                profileCard.style.justifyContent = 'flex-start';
+            } else if (direction === 'center') {
+                profileCard.style.justifyContent = 'center';
+            } else {
+                profileCard.style.justifyContent = 'flex-end';
+            }
+        }
+
+        function autoAdjustAvatar() {
+            avatarSizeSlider.value = 220;
+            updateAvatarSize();
+            setAlignment('center');
+        }
+
+        function resetAvatar() {
+            avatarSizeSlider.value = 190;
+            updateAvatarSize();
+            setAlignment('left');
+        }
+
+        avatarSizeSlider.addEventListener('input', updateAvatarSize);
+        document.getElementById('align-left').addEventListener('click', () => setAlignment('left'));
+        document.getElementById('align-center').addEventListener('click', () => setAlignment('center'));
+        document.getElementById('align-right').addEventListener('click', () => setAlignment('right'));
+        autoAlignBtn.addEventListener('click', autoAdjustAvatar);
+        resetAvatarBtn.addEventListener('click', resetAvatar);
+
+        function openAvatarModal() {
+            avatarModal.classList.add('active');
+            editProfileBtn.textContent = 'Đóng chỉnh sửa';
+        }
+
+        function closeAvatarModalWindow() {
+            avatarModal.classList.remove('active');
+            editProfileBtn.textContent = 'Sửa hồ sơ';
+        }
+
+        editProfileBtn.addEventListener('click', function() {
+            if (avatarModal.classList.contains('active')) {
+                closeAvatarModalWindow();
+            } else {
+                openAvatarModal();
+            }
+        });
+
+        closeAvatarModal.addEventListener('click', closeAvatarModalWindow);
+        avatarModal.addEventListener('click', function(event) {
+            if (event.target === avatarModal) {
+                closeAvatarModalWindow();
+            }
+        });
+
+        resetAvatar();
+    </script>
+</body>
+</html>

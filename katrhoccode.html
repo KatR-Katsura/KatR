@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang web đầu tiên của bo</title>
+    <link rel="icon" type="image/jpeg" href="https://i.pinimg.com/736x/4c/1e/1d/4c1e1d6417e371749ee4675797401129.jpg">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background: #272727;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            inset: -40%;
+            display: grid;
+            grid-template-columns: repeat(14, 180px);
+            gap: 2px;
+            transform: rotate(45deg) scale(1.3);
+            opacity: .55;
+            z-index: 0;
+            pointer-events: none;
+            filter: brightness(.65);
+        }
+
+        .bg-pattern img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+
+            border: 2px solid rgb(255, 255, 255);
+
+        }
+
+
+
+
+        .content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100vh;
+        }
+
+        button {
+            background: #e96cb5;
+            color: white;
+            padding: 10px 20px;
+            border: 2px solid #ff0101;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: calc(70% - 40px);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            display: inline-block;
+            pointer-events: auto;
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        }
+
+        button:hover {
+            background: #ff0101;
+            color: white;
+            text-decoration: underline;
+            text-decoration-color: #e96cb5;
+            text-decoration-thickness: 2px;
+            transform: translate(-50%, -50%) scale(1.09);
+            box-shadow: 0 8px 18px rgb(255, 0, 0);
+            border: 2px solid #e96cb5;
+        }
+
+        .gallery img {
+            width: 264px;
+            height: 264px;
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            border: 3px solid #ffd2a6;
+            box-shadow:
+                0 0 10px rgba(0, 0, 0, .9),
+                0 0 50px rgba(255, 192, 203, .8),
+                0 0 50px rgba(255, 192, 203, .6),
+                0 0 100px rgba(255, 192, 203, .4);
+            position: relative;
+            z-index: 2;
+            transition: .35s;
+            cursor: pointer;
+        }
+
+        .left:hover {
+            transform: rotate(-25deg) scale(1.08);
+        }
+
+        .center:hover {
+            transform: scale(1.08);
+        }
+
+        .right:hover {
+            transform: rotate(25deg) scale(1.08);
+        }
+
+
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .left {
+            transform: rotate(-25deg);
+            margin-top: 310px;
+        }
+
+        .center {
+            transform: rotate(0deg);
+            margin-top: 110px;
+        }
+
+        .right {
+            transform: rotate(25deg);
+            margin-top: 310px;
+        }
+
+        .popup {
+            position: fixed;
+            inset: 0;
+
+            background: rgba(0, 0, 0, .88);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition: .35s;
+
+            z-index: 9999;
+        }
+
+        .popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #popupImg {
+
+            max-width: 85%;
+            max-height: 90%;
+
+            border-radius: 15px;
+
+            transform: scale(.8);
+
+            transition: .35s;
+        }
+
+        .popup.show #popupImg {
+
+            transform: scale(1);
+        }
+
+        #close {
+
+            position: absolute;
+
+            top: 20px;
+            right: 35px;
+
+            color: white;
+
+            font-size: 60px;
+
+            cursor: pointer;
+        }
+
+        .music-player {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 999px;
+            background: rgba(12, 12, 18, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .music-player:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(255, 128, 186, 0.24);
+            border-color: rgba(255, 214, 240, 0.5);
+        }
+
+        .music-player__cover {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+        }
+
+        .music-player__btn {
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8fc3, #9e7dff);
+            color: white;
+            font-size: 18px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 122, 191, 0.26);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: static;
+            top: auto;
+            left: auto;
+            transform: none;
+            z-index: auto;
+        }
+
+        .music-player__btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 24px rgba(255, 122, 191, 0.35);
+            background: linear-gradient(135deg, #ff8fc3, #9e7dff);
+            color: white;
+            text-decoration: none;
+        }
+
+        .music-player--playing {
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 24px rgba(255, 142, 196, 0.28);
+        }
+
+        .music-player--playing .music-player__cover {
+            animation: spinCover 8s linear infinite;
+        }
+
+        .music-player--playing .music-player__btn {
+            box-shadow: 0 0 18px rgba(255, 142, 196, 0.36);
+        }
+
+        @keyframes spinCover {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <audio id="music" src="cuoidi.mp3" loop></audio>
+    <div class="bg-pattern"></div>
+
+    <div class="content">
+        <button>Thấy ảnh có đẹp không?</button>
+        <div class="gallery">
+            <img class="left" src="han1.png" data-full="han1.1.png">
+
+            <img class="center" src="han3.png" data-full="han3.2.jpg">
+
+            <img class="right" src="han4.jpg" data-full="han4.1.jpg">
+        </div>
+    </div>
+    <div class="music-player" id="musicPlayer">
+        <img class="music-player__cover" src="de167c7e27b4d920b0fd4a574fe35d0e-Photoroom.png" alt="Album cover">
+        <button class="music-player__btn" type="button" aria-label="Play music">▶</button>
+    </div>
+
+    <div id="popup" class="popup">
+
+        <span id="close">&times;</span>
+
+        <img id="popupImg">
+
+    </div>
+    <script>
+
+        const bgPattern = document.querySelector(".bg-pattern");
+
+        const cols = 14;
+        const rows = 14;
+        const total = cols * rows;
+
+        for (let i = 0; i < total; i++) {
+
+            const row = Math.floor(i / cols);
+            const col = i % cols;
+
+            const img = document.createElement("img");
+
+            img.src = (row + col) % 2 === 0
+                ? "han1.png"
+                : "han4.jpg";
+
+            img.alt = "";
+
+            bgPattern.appendChild(img);
+        }
+        const popup = document.getElementById("popup");
+        const popupImg = document.getElementById("popupImg");
+        const close = document.getElementById("close");
+
+        const galleryImages = document.querySelectorAll(".gallery img");
+
+        galleryImages.forEach(img => {
+
+            img.addEventListener("click", function () {
+
+                popup.classList.add("show");
+
+                popupImg.src = img.dataset.full;
+
+            });
+
+        });
+
+        close.addEventListener("click", function () {
+
+            popup.classList.remove("show");
+
+        });
+
+        // Bấm ra ngoài ảnh để đóng
+        popup.addEventListener("click", function (e) {
+
+            if (e.target === popup) {
+                popup.classList.remove("show");
+            }
+
+        });
+    </script>
+    <script>
+        const music = document.querySelector("#music");
+        const musicPlayer = document.querySelector("#musicPlayer");
+        const musicToggleBtn = document.querySelector(".music-player__btn");
+
+        function updateMusicPlayerUI() {
+            const isPlaying = !music.paused;
+            musicPlayer.classList.toggle("music-player--playing", isPlaying);
+            musicToggleBtn.textContent = isPlaying ? "⏸" : "▶";
+            musicToggleBtn.setAttribute("aria-label", isPlaying ? "Pause music" : "Play music");
+        }
+
+        musicToggleBtn.addEventListener("click", async function (e) {
+            e.stopPropagation();
+
+            if (music.paused) {
+                try {
+                    await music.play();
+                } catch (error) {
+                    console.log("Không thể phát nhạc:", error);
+                }
+            } else {
+                music.pause();
+            }
+
+            updateMusicPlayerUI();
+        });
+
+        music.addEventListener("play", updateMusicPlayerUI);
+        music.addEventListener("pause", updateMusicPlayerUI);
+        music.addEventListener("ended", updateMusicPlayerUI);
+        music.addEventListener("error", function () {
+            console.log("Không tìm thấy file nhạc hoặc nhạc không thể phát.");
+        });
+
+        updateMusicPlayerUI();
+    </script>
+</body>
+
+</html>
